@@ -57,4 +57,4 @@ ggplot(data=actDataAg, aes(x=actDataAg$date, y=actDataAg$totalSteps)) + geom_poi
   geom_line()+theme(axis.text.x = element_text(angle = 90, hjust = 1)
                     ,axis.title.x = element_text(face="bold", size=12)
                     ,legend.position="none"
-  )+labs(x="Date",y="Total Steps")
+                   )+labs(x="Date",y="Total Steps")
