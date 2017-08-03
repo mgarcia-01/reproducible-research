@@ -23,9 +23,11 @@ localFileURL <- file.path(getwd(),paste("activity",".csv",sep = ""))
 download.file(webURL,destfile = destURL)
 
 unzip(destURL)
-activityData <- as.data.frame(fread(localFileURL))
+#activityData <- as.data.frame(read.csv(localFileURL))
+activityData <- read.csv(localFileURL, quote = "\"",stringsAsFactors = FALSE)
 activityData$steps <- as.numeric(activityData$steps)
 activityData$interval <- as.numeric(activityData$interval)
+activityData$date <- as.Date(activityData$date,format = "%Y-%m-%d")
 
 ```
 
@@ -53,8 +55,27 @@ stepsMean <- stepSummary[4]
 ```
 
 
+``` {r include = TRUE, echo = TRUE}
+# 4) Time series plot of the average number of steps taken
+# removed na's
+actDataAg <- activityDataAg[complete.cases(activityDataAg),]
+#activityTS= ts(rnorm(48), start=c(2293,6), frequency=1)
+plot(actDataAg$date,actDataAg$totalSteps,type = "l", xlab = "date",ylab = "total steps")
+```
 
 
+
+The date with the most 5 interval steps is `r activity5min[which(activity5min$avgsteps == max(activity5min$avgsteps)),"date"]`. The number of steps on this day was `r activity5min[which(activity5min$avgsteps == max(activity5min$avgsteps)),"avgsteps"]`
+
+``` {r include = TRUE,echo = TRUE}
+# 5
+activity5min <- activityData[which(activityData$interval == 5),]
+activity5min <- aggregate(activity5min$steps,list(activity5min$date),mean)
+names(activity5min) <- c("date","avgsteps")
+activity5min <- activity5min[complete.cases(activity5min),]
+plot(activity5min$date,activity5min$avgsteps,type = "l", xlab = "date", ylab = "5min Avg Steps")
+
+```
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
 
 When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file).

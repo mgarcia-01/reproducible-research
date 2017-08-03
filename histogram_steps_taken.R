@@ -1,5 +1,5 @@
 #   2) Histogram of the total number of steps taken each day
-install.packages("astsa", dependencies = TRUE)
+#install.packages("astsa", dependencies = TRUE)
 # if we do not remove na's then the total is skewed towards 0 
 activityDataAg <- aggregate(activityData$steps,list(activityData$date),sum)
 names(activityDataAg) <- c("date","totalSteps")
@@ -18,22 +18,35 @@ stepsMean <- stepSummary[4]
 # removed na's
 actDataAg <- activityDataAg[complete.cases(activityDataAg),]
 #activityTS= ts(rnorm(48), start=c(2293,6), frequency=1)
-plot(actDataAg$date,actDataAg$totalSteps,type = "l")
-text(dow_icefrozn$order_dow, (as.numeric(dow_icefrozn$no_dist_orders)/1000)
-     ,labels = round((as.numeric(dow_icefrozn$no_dist_orders)/1000))
-     , cex=0.85, font = 4, pos= 3, col="black")
+plot(actDataAg$date,actDataAg$totalSteps,type = "l", xlab = "date",ylab = "total steps")
+
+
+#  5)  The 5-minute interval that, on average, contains the maximum number of steps
+activity5min <- activityData[which(activityData$interval == 5),]
+activity5min <- aggregate(activity5min$steps,list(activity5min$date),mean)
+names(activity5min) <- c("date","avgsteps")
+activity5min <- activity5min[complete.cases(activity5min),]
+plot(activity5min$date,activity5min$avgsteps,type = "l", xlab = "date", ylab = "5min Avg Steps")
+
+activity5min[which(activity5min$avgsteps == max(activity5min$avgsteps)),"date"]
+
+#activityTS= ts(rnorm(48), start=c(2293,6), frequency=1)
+
+
+
+#  6 Code to describe and show a strategy for imputing missing data
 
 
 
 
-axis.Date(1, at = seq(actDataAg[1], actDataAg[100], length.out=25),
-          labels = seq(actDataAg[1], actDataAg[100], length.out=25),
-          format= "%m/%d/%Y", las = 2)
-time(actDataAg)
 
 
 
-actDataAg$date <- as.Date(actDataAg$date,format = "%y-%m-%d")
+
+
+
+
+actDataAg$date = as.Date(actDataAg$date,format = "%y-%m-%d")
 plot(actDataAg$totalSteps~as.Date(actDataAg$date,"%y-%m-%d"),type="l",
      xlab="Date",ylab="Total Steps")
 
