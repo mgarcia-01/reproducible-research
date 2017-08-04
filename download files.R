@@ -22,8 +22,8 @@ activityData$date <- as.Date(activityData$date,format = "%Y-%m-%d")
 
 
 
-lct <- Sys.getlocale("LC_TIME"); Sys.setlocale("LC_TIME", "C")
-Sys.setlocale("LC_TIME", lct)
+#lct <- Sys.getlocale("LC_TIME"); Sys.setlocale("LC_TIME", "C")
+#Sys.setlocale("LC_TIME", lct)
 #Sys.getlocale()
 #[1] "en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8"
 #Sys.setlocale("LC_TIME", "en_US.UTF-8")

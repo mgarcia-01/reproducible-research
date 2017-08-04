@@ -36,10 +36,11 @@ activity5min[which(activity5min$avgsteps == max(activity5min$avgsteps)),"date"]
 
 #  6 Code to describe and show a strategy for imputing missing data
 
+stepSummary <- as.table(summary(activityDataAg$totalSteps))
 
+rowsNA <- nrow(activityData[!complete.cases(activityData),])
 
-
-
+zoo
 
 
 
