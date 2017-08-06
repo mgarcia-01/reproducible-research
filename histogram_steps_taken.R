@@ -40,13 +40,25 @@ stepSummary <- as.table(summary(activityDataAg$totalSteps))
 
 rowsNA <- nrow(activityData[!complete.cases(activityData),])
 
-#zoo
-head(actDataAg,5)
+library(zoo)
+activityMean <- aggregate(activityData$steps,list(activityData$date),mean)
+names(activityMean) <- c("date","avgSteps")
+actDataMean <- activityMean[complete.cases(activityMean),]
+actDataMeanNA <- activityMean[!complete.cases(activityMean),]
+
+activityNAfill <- na.locf(activityMean[order(activityMean$date, decreasing = TRUE)
+                                       ,]
+                          , fromLast = TRUE)
+activityNAfill <- activityNAfill[order(activityNAfill$date
+                                       ,decreasing = FALSE)
+                                 ,]
 
 
 
 
 
+
+###### other notes
 
 actDataAg$date = as.Date(actDataAg$date,format = "%y-%m-%d")
 plot(actDataAg$totalSteps~as.Date(actDataAg$date,"%y-%m-%d"),type="l",
