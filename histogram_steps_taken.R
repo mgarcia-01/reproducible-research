@@ -40,7 +40,8 @@ stepSummary <- as.table(summary(activityDataAg$totalSteps))
 
 rowsNA <- nrow(activityData[!complete.cases(activityData),])
 
-zoo
+#zoo
+head(actDataAg,5)
 
 
 
