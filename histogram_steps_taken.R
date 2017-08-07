@@ -63,12 +63,13 @@ activityDataMerge$avgSteps <- as.numeric(activityDataMerge$avgSteps)
 
 activity
 
-activitySumFillNA <- replace
+activitySumFillNA <- 
 
 hist(activityNAfill$avgSteps, xlab = "MeanSteps", breaks = 20)
 
-
-
+activityMatch <- match(activityData[which(is.na(activityData$steps) == TRUE),],activityNAfill)
+activityData<- as.data.table(activityData)
+activityData[grepl()]
 
 
 ###### other notes
