@@ -77,7 +77,7 @@ plot(activity5min$date,activity5min$avgsteps,type = "l", xlab = "date", ylab = "
 
 ```
 
-
+######  6 Code to describe and show a strategy for imputing missing datas
 There are `r  nrow(activityData[!complete.cases(activityData),])` days that have NA's
 
 ``` {r include = TRUE, echo = TRUE}
@@ -86,6 +86,9 @@ There are `r  nrow(activityData[!complete.cases(activityData),])` days that have
 #rowsNA <- nrow(activityData[!complete.cases(activityData),])
 
 ```
+
+The strategy to fill na's includes carrying forward last periods mean value. The dataset is aggregated to get the mean steps for each day. If a day is NA, then the value from previous day is utilized. The below script aggregates, sorts, the uses previous day mean value. The dataset created is "activityNAfill"
+
 
 ``` {r include = TRUE, echo = TRUE}
 #  6 Code to describe and show a strategy for imputing missing data
@@ -109,6 +112,11 @@ activityNAfill <- activityNAfill[order(activityNAfill$date
 
 ```
 
+
+``` {r include = TRUE, echo = TRUE}
+
+
+```
 ##### License and Copyright
    Copyright 2017 Michael Garcia. All Rights Reserved.
    Inquiries mgar_datascience at protonmail.com

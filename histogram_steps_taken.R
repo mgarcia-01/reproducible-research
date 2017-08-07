@@ -4,7 +4,7 @@
 activityDataAg <- aggregate(activityData$steps,list(activityData$date),sum)
 names(activityDataAg) <- c("date","totalSteps")
 #activityDataAg <- activityDataAg[complete.cases(activityDataAg),]
-hist(activityDataAg$totalSteps, xlab = "TotalSteps", breaks = 10)
+hist(activityDataAg$totalSteps, xlab = "TotalSteps", breaks = 20)
 
 ##3) Mean and median number of steps taken each day
 
@@ -52,7 +52,20 @@ activityNAfill <- na.locf(activityMean[order(activityMean$date, decreasing = TRU
 activityNAfill <- activityNAfill[order(activityNAfill$date
                                        ,decreasing = FALSE)
                                  ,]
+activityNAfill$date <-  as.Date(activityNAfill$date,format = "%Y-%m-%d")
+activityNAfill$avgSteps <- as.numeric(activityNAfill$avgSteps)
 
+activityDataAg[which(is.na(activityDataAg$totalSteps) == TRUE),]
+activityDataMerge <- merge(activityDataAg, activityNAfill, by = "date", all.x = TRUE)
+activityDataMerge$date <- as.Date(activityDataMerge$date,format = "%Y-%m-%d")
+activityDataMerge$totalSteps <- as.numeric(activityDataMerge$totalSteps)
+activityDataMerge$avgSteps <- as.numeric(activityDataMerge$avgSteps)
+
+activity
+
+activitySumFillNA <- replace
+
+hist(activityNAfill$avgSteps, xlab = "MeanSteps", breaks = 20)
 
 
 
