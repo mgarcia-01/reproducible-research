@@ -46,30 +46,54 @@ names(activityMean) <- c("date","avgSteps")
 actDataMean <- activityMean[complete.cases(activityMean),]
 actDataMeanNA <- activityMean[!complete.cases(activityMean),]
 
-activityNAfill <- na.locf(activityMean[order(activityMean$date, decreasing = TRUE)
-                                       ,]
-                          , fromLast = TRUE)
-activityNAfill <- activityNAfill[order(activityNAfill$date
-                                       ,decreasing = FALSE)
-                                 ,]
-activityNAfill$date <-  as.Date(activityNAfill$date,format = "%Y-%m-%d")
+activityNAfill <- na.locf(activityMean[order(activityMean$date, decreasing = TRUE),], fromLast = TRUE)
+activityNAfill <- activityNAfill[order(activityNAfill$date,decreasing = FALSE),]
 activityNAfill$avgSteps <- as.numeric(activityNAfill$avgSteps)
+activityNAfill$date <- as.Date(activityNAfill$date,format = "%Y-%m-%d")
 
-activityDataAg[which(is.na(activityDataAg$totalSteps) == TRUE),]
+hist(activityNAfill$avgSteps, xlab = "MeanSteps", breaks = 10)
+
+
+activityDataMean <- aggregate(activityData$steps,list(activityData$date),mean)
+names(activityDataMean) <- c("date","meanSteps")
+hist(activityDataMean$meanSteps, xlab = "Mean Steps with NA", breaks = 10)
+
+#activityDataAg[which(is.na(activityDataAg$totalSteps) == TRUE),]
 activityDataMerge <- merge(activityDataAg, activityNAfill, by = "date", all.x = TRUE)
 activityDataMerge$date <- as.Date(activityDataMerge$date,format = "%Y-%m-%d")
 activityDataMerge$totalSteps <- as.numeric(activityDataMerge$totalSteps)
 activityDataMerge$avgSteps <- as.numeric(activityDataMerge$avgSteps)
 
-activity
+#activity
 
-activitySumFillNA <- 
+activityDataFull <- merge(activityData,activityDataMerge, by = "date")
+activityDataFull$steps <- as.numeric(activityData$steps)
+activityDataFull$interval <- as.numeric(activityData$interval)
+activityDataFull$date <- as.Date(activityData$date,format = "%Y-%m-%d")
+
+head(activityDataFull[which(activityDataFull == "2012-11-09"),],10)
+#activitySumFillNA <- 
 
 hist(activityNAfill$avgSteps, xlab = "MeanSteps", breaks = 20)
 
-activityMatch <- match(activityData[which(is.na(activityData$steps) == TRUE),],activityNAfill)
-activityData<- as.data.table(activityData)
-activityData[grepl()]
+#activityMatch <- match(activityData[which(is.na(activityData$steps) == TRUE),],activityNAfill)
+##activityData<- as.data.table(activityData)
+
+head(activityData[which(activityData$date != "2012-10-08" & activityData$date != "2012-10-01" & !complete.cases(activityData)),],100)
+head(activityData[which(activityData$date == "2012-11-01" & !complete.cases(activityData)),],100)
+
+
+unique(activityData[which(is.na(activityData) == TRUE),"date"])
+# [1] "2012-10-01" "2012-10-08" "2012-11-01" "2012-11-04" "2012-11-09" "2012-11-10" "2012-11-14" "2012-11-30"
+activityData$steps[is.na(activityData$steps)] <- round(mean(activityData$steps, na.rm = TRUE))
+
+for(i in 1:ncol(activityData)){
+  activityData[is.na(activityData[,i]), i] <- mean(activityData[,i], na.rm = TRUE)
+}
+
+
+####
+
 
 
 ###### other notes
