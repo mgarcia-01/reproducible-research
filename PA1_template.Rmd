@@ -87,7 +87,7 @@ There are `r  nrow(activityData[!complete.cases(activityData),])` days that have
 
 ```
 
-The strategy to fill na's included calculating the average steps per interval. Then NA's were replaced with the average value in respect to its interval. The mean after replacing the NA's is `r NAFillStepsSummary[4]` and the median is `r NAFillStepsSummary[3]`. The total daily steps and the average per inverval had no significant changes after filling the NA's, as can be seen on the charts.
+The strategy to fill na's included calculating the average steps per interval. Then NA's were replaced with the average value in respect to its interval. The mean after replacing the NA's is `r round(NAFillStepsSummary[4],0)` and the median is `r round(NAFillStepsSummary[3],0)`. The total daily steps and the average per inverval had no significant changes after filling the NA's, as can be seen on the charts.
 
 ``` {r include = TRUE, echo = TRUE}
 #  6 Code to describe and show a strategy for imputing missing data
