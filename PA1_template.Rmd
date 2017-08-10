@@ -69,11 +69,11 @@ The date with the most 5 interval steps is `r activity5min[which(activity5min$av
 
 ``` {r include = TRUE,echo = TRUE}
 # 5
-activity5min <- activityData[which(activityData$interval == 5),]
-activity5min <- aggregate(activity5min$steps,list(activity5min$date),mean)
-names(activity5min) <- c("date","avgsteps")
-activity5min <- activity5min[complete.cases(activity5min),]
-plot(activity5min$date,activity5min$avgsteps,type = "l", xlab = "date", ylab = "5min Avg Steps")
+activity5min <- activityData[complete.cases(activityData),]
+activity5min <- aggregate(activity5min$steps,list(activity5min$interval),mean)
+names(activity5min) <- c("interval","avgsteps")
+activity5min$avgsteps <- round(activity5min$avgsteps,1)
+plot(activity5min$interval,activity5min$avgsteps,type = "l", xlab = "5min interval", ylab = "5min Avg Steps")
 
 ```
 

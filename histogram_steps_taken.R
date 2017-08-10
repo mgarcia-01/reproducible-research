@@ -30,6 +30,12 @@ plot(activity5min$date,activity5min$avgsteps,type = "l", xlab = "date", ylab = "
 
 activity5min[which(activity5min$avgsteps == max(activity5min$avgsteps)),"date"]
 
+activity5min <- activityData[complete.cases(activityData),]
+activity5min <- aggregate(activity5min$steps,list(activity5min$interval),mean)
+names(activity5min) <- c("interval","avgsteps")
+activity5min$avgsteps <- round(activity5min$avgsteps,1)
+plot(activity5min$interval,activity5min$avgsteps,type = "l", xlab = "5min interval", ylab = "5min Avg Steps")
+
 #activityTS= ts(rnorm(48), start=c(2293,6), frequency=1)
 
 
