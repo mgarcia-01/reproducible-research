@@ -52,6 +52,7 @@ activityIntMergeSum <- aggregate(activityIntMerge$steps,list(activityIntMerge$da
 names(activityIntMergeSum) <- c("date","totalSteps")
 activityIntMergeSum$date <-  as.Date(activityIntMergeSum$date,format = "%Y-%m-%d")
 activityIntMergeSum$totalSteps <- as.numeric(activityIntMergeSum$totalSteps)
+### 7 Histogram of the total number of steps taken each day after missing values are imputed
 hist(activityIntMergeSum$totalSteps, main = "Total Steps NA filled with Interval Avg",xlab = "TotalSteps", breaks = 10 )
 
 NAFillStepsSummary <- as.table(summary(activityIntMergeSum$totalSteps))
@@ -63,6 +64,33 @@ names(activityIntMergeAvg) <- c("interval","avgSteps")
 activityIntMergeAvg$avgSteps <- round(activityIntMergeAvg$avgSteps,1)
 plot(activityIntMergeAvg$interval,activityIntMergeAvg$avgSteps,type = "l", main = "Interval after NA Filled",xlab = "5min interval", ylab = "5min Avg Steps")
 
+
+
+
+###### 8) Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends
+
+activityData$wkdy <- weekdays(activityData$date)
+activityData$weektype <- ifelse((activityData$wkdy == "Saturday" | activityData$wkdy == "Sunday"), "Weekend", "Weekday" )
+activityWk <- activityData[complete.cases(activityData),]
+activityWkend <- aggregate(activityWk[which(activityWk$weektype =="Weekend"),"steps"]
+                           , list(activityWk[which(activityWk$weektype =="Weekend"),"interval"]),mean)
+names(activityWkend) <- c("interval","avgSteps")
+activityWkend$interval <- as.integer(activityWkend$interval)
+activityWkend$avgSteps <- round(as.numeric(activityWkend$avgSteps),1)
+
+activityWkdy <- aggregate(activityWk[which(activityWk$weektype =="Weekday"),"steps"]
+                           , list(activityWk[which(activityWk$weektype =="Weekday"),"interval"]),mean)
+names(activityWkdy ) <- c("interval","avgSteps")
+activityWkdy$interval <- as.integer(activityWkdy$interval)
+activityWkdy$avgSteps <- round(as.numeric(activityWkdy$avgSteps),1)
+par(mfrow=c(2,1))
+#par(mfcol=c(2,1))
+plot(activityWkdy$interval, activityWkdy$avgSteps, type = "l", xlab = "", ylab = "WkDay Avg Steps")
+plot(activityWkend$interval, activityWkend$avgSteps, type = "l",xlab = "interval", ylab = "WkEnd Avg Steps")
+mtext("Weekend vs. Weekday Avg Steps", side=3, outer=TRUE, line=-3) 
+
+
+#############################################
 
 
 

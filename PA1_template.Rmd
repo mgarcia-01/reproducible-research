@@ -1,5 +1,5 @@
 ---
-title: "Activity_Report"
+title: "Activity Report PA1"
 author: "Michael Garcia"
 date: "August 1, 2017"
 output:
@@ -7,10 +7,6 @@ output:
   pdf_document: default
   word_document: default
 ---
-
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
-
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*.
 
 #### 1) Read and Process Data
 
@@ -45,7 +41,9 @@ names(activityDataAg) <- c("date","totalSteps")
 hist(activityDataAg$totalSteps, xlab = "TotalSteps", breaks = 10)
 ```
 
-The total median steps are `r stepsMedian` and the mean for the total steps taken is `r stepsMean`
+
+#### 3) Mean and median number of steps taken each day
+The total median steps are `r as.integer(stepsMedian)` and the mean for the total steps taken is `r as.integer(stepsMean)`
 
 ``` {r include = TRUE, echo = TRUE}
 #3) Mean and median number of steps taken each day
@@ -53,6 +51,9 @@ stepSummary <- as.table(summary(activityDataAg$totalSteps))
 stepsMedian <- stepSummary[3]
 stepsMean <- stepSummary[4]
 ```
+
+
+#### 4) Time series plot of the average number of steps taken
 
 
 ``` {r include = TRUE, echo = TRUE}
@@ -64,11 +65,11 @@ plot(actDataAg$date,actDataAg$totalSteps,type = "l", xlab = "date",ylab = "total
 ```
 
 
-
+#### 5) The 5-minute interval that, on average, contains the maximum number of steps
 The 5 minutes interval with the most steps is `r activity5min[which(activity5min$avgsteps == max(activity5min$avgsteps)),"interval"]`. The average number of steps at this interval is `r activity5min[which(activity5min$avgsteps == max(activity5min$avgsteps)),"avgsteps"]`.
 
 ``` {r include = TRUE,echo = TRUE}
-# 5
+# 5   The 5-minute interval that, on average, contains the maximum number of steps
 activity5min <- activityData[complete.cases(activityData),]
 activity5min <- aggregate(activity5min$steps,list(activity5min$interval),mean)
 names(activity5min) <- c("interval","avgsteps")
@@ -81,13 +82,11 @@ plot(activity5min$interval,activity5min$avgsteps,type = "l", xlab = "5min interv
 There are `r  nrow(activityData[!complete.cases(activityData),])` days that have NA's
 
 ``` {r include = TRUE, echo = TRUE}
-
 #stepSummary <- as.table(summary(activityDataAg$totalSteps))
 #rowsNA <- nrow(activityData[!complete.cases(activityData),])
-
 ```
 
-The strategy to fill na's included calculating the average steps per interval. Then NA's were replaced with the average value in respect to its interval. The mean after replacing the NA's is `r round(NAFillStepsSummary[4],0)` and the median is `r round(NAFillStepsSummary[3],0)`. The total daily steps and the average per inverval had no significant changes after filling the NA's, as can be seen on the charts.
+The strategy to fill na's included calculating the average steps per interval. Then NA's were replaced with the average value in respect to its interval. The mean after replacing the NA's is `r as.integer(round(NAFillStepsSummary[4],0))` and the median is `r as.integer(round(NAFillStepsSummary[3],0))`. The total daily steps and the average per inverval had no significant changes after filling the NA's, as can be seen on the charts.
 
 ``` {r include = TRUE, echo = TRUE}
 #  6 Code to describe and show a strategy for imputing missing data
@@ -105,12 +104,17 @@ activityIntMergeSum <- aggregate(activityIntMerge$steps,list(activityIntMerge$da
 names(activityIntMergeSum) <- c("date","totalSteps")
 activityIntMergeSum$date <-  as.Date(activityIntMergeSum$date,format = "%Y-%m-%d")
 activityIntMergeSum$totalSteps <- as.numeric(activityIntMergeSum$totalSteps)
+```
+
+
+###### 7) Histogram of the total number of steps taken each day after missing values are imputed
+
+``` {r include = TRUE , echo = TRUE}
 hist(activityIntMergeSum$totalSteps, main = "Total Steps NA filled with Interval Avg",xlab = "TotalSteps", breaks = 10 )
 
 NAFillStepsSummary <- as.table(summary(activityIntMergeSum$totalSteps))
 ```
 
-We can also see 
 
 ``` {r include = TRUE, echo = TRUE}
 activityIntMergeAvg<- aggregate(activityIntMerge$steps,list(activityIntMerge$interval),mean)
@@ -120,17 +124,31 @@ plot(activityIntMergeAvg$interval,activityIntMergeAvg$avgSteps,type = "l", main 
 ```
 
 
-
-
-
-
-
+###### 8) Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends
 
 
 ``` {r include = TRUE, echo = TRUE}
-activityDataMean <- aggregate(activityData$steps,list(activityData$date),mean)
-names(activityDataMean) <- c("date","meanSteps")
-hist(activityDataMean$meanSteps, xlab = "Mean Steps with NA", breaks = 10)
+###### 8) Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends
+
+activityData$wkdy <- weekdays(activityData$date)
+activityData$weektype <- ifelse((activityData$wkdy == "Saturday" | activityData$wkdy == "Sunday"), "Weekend", "Weekday" )
+activityWk <- activityData[complete.cases(activityData),]
+activityWkend <- aggregate(activityWk[which(activityWk$weektype =="Weekend"),"steps"]
+                           , list(activityWk[which(activityWk$weektype =="Weekend"),"interval"]),mean)
+names(activityWkend) <- c("interval","avgSteps")
+activityWkend$interval <- as.integer(activityWkend$interval)
+activityWkend$avgSteps <- round(as.numeric(activityWkend$avgSteps),1)
+
+activityWkdy <- aggregate(activityWk[which(activityWk$weektype =="Weekday"),"steps"]
+                           , list(activityWk[which(activityWk$weektype =="Weekday"),"interval"]),mean)
+names(activityWkdy ) <- c("interval","avgSteps")
+activityWkdy$interval <- as.integer(activityWkdy$interval)
+activityWkdy$avgSteps <- round(as.numeric(activityWkdy$avgSteps),1)
+par(mfrow=c(2,1))
+#par(mfcol=c(2,1))
+plot(activityWkdy$interval, activityWkdy$avgSteps, type = "l", xlab = "", ylab = "WkDay Avg Steps")
+plot(activityWkend$interval, activityWkend$avgSteps, type = "l",xlab = "interval", ylab = "WkEnd Avg Steps")
+mtext("Weekend vs. Weekday Avg Steps", side=3, outer=TRUE, line=-1) 
 ```
 
 ##### License and Copyright
