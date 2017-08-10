@@ -65,7 +65,7 @@ plot(actDataAg$date,actDataAg$totalSteps,type = "l", xlab = "date",ylab = "total
 
 
 
-The date with the most 5 interval steps is `r activity5min[which(activity5min$avgsteps == max(activity5min$avgsteps)),"date"]`. The number of steps on this day was `r activity5min[which(activity5min$avgsteps == max(activity5min$avgsteps)),"avgsteps"]`
+The 5 minutes interval with the most steps is `r activity5min[which(activity5min$avgsteps == max(activity5min$avgsteps)),"interval"]`. The average number of steps at this interval is `r activity5min[which(activity5min$avgsteps == max(activity5min$avgsteps)),"avgsteps"]`.
 
 ``` {r include = TRUE,echo = TRUE}
 # 5
@@ -99,6 +99,7 @@ Comparing the two histrograms, there is no significant change, when the breaks a
 stepSummary <- as.table(summary(activityDataAg$totalSteps))
 
 rowsNA <- nrow(activityData[!complete.cases(activityData),])
+
 
 library(zoo)
 activityMean <- aggregate(activityData$steps,list(activityData$date),mean)
