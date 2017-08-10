@@ -1,18 +1,15 @@
----
-output:
-  md_document:
-    variant: markdown
-title: 'PA1\_githubMarkdown'
----
+``` r
+knitr::opts_chunk$set(echo = TRUE)
+```
 
-Activity Report PA1 {#activity-report-pa1 .tabset .tabset-fade .tabset-pills}
+Activity Report PA1
 -------------------
 
 ### Report
 
 #### 1) Read and Process Data
 
-``` {.r}
+``` r
 library(data.table)
 
 webURL <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip"
@@ -30,7 +27,7 @@ activityData$date <- as.Date(activityData$date,format = "%Y-%m-%d")
 
 #### 2) Histogram of the total number of steps taken each day
 
-``` {.r}
+``` r
 #   2) Histogram of the total number of steps taken each day
 activityDataAg <- aggregate(activityData$steps,list(activityData$date),sum)
 names(activityDataAg) <- c("date","totalSteps")
@@ -38,23 +35,22 @@ names(activityDataAg) <- c("date","totalSteps")
 hist(activityDataAg$totalSteps, xlab = "TotalSteps", breaks = 10)
 ```
 
-![](PA1_githubMarkdown_files/figure-markdown/unnamed-chunk-2-1.png)
+![](PA1_githubMarkdown_files/figure-markdown_github/unnamed-chunk-2-1.png)
 
 #### 3) Mean and median number of steps taken each day
 
-``` {.r}
+``` r
 #3) Mean and median number of steps taken each day
 stepSummary <- as.table(summary(activityDataAg$totalSteps))
 stepsMedian <- stepSummary[3]
 stepsMean <- stepSummary[4]
 ```
 
-The total median steps are 10765 and the mean for the total steps taken
-is 10766
+The total median steps are 10765 and the mean for the total steps taken is 10766
 
 #### 4) Time series plot of the average number of steps taken
 
-``` {.r}
+``` r
 # 4) Time series plot of the average number of steps taken
 # removed na's
 actDataAg <- activityDataAg[complete.cases(activityDataAg),]
@@ -62,11 +58,11 @@ actDataAg <- activityDataAg[complete.cases(activityDataAg),]
 plot(actDataAg$date,actDataAg$totalSteps,type = "l", xlab = "date",ylab = "total steps")
 ```
 
-![](PA1_githubMarkdown_files/figure-markdown/unnamed-chunk-4-1.png)
+![](PA1_githubMarkdown_files/figure-markdown_github/unnamed-chunk-4-1.png)
 
 #### 5) The 5-minute interval that, on average, contains the maximum number of steps
 
-``` {.r}
+``` r
 # 5   The 5-minute interval that, on average, contains the maximum number of steps
 activity5min <- activityData[complete.cases(activityData),]
 activity5min <- aggregate(activity5min$steps,list(activity5min$interval),mean)
@@ -75,21 +71,20 @@ activity5min$avgsteps <- round(activity5min$avgsteps,1)
 plot(activity5min$interval,activity5min$avgsteps,type = "l", xlab = "5min interval", ylab = "5min Avg Steps")
 ```
 
-![](PA1_githubMarkdown_files/figure-markdown/unnamed-chunk-5-1.png)
+![](PA1_githubMarkdown_files/figure-markdown_github/unnamed-chunk-5-1.png)
 
-The 5 minutes interval with the most steps is 835. The average number of
-steps at this interval is 206.2.
+The 5 minutes interval with the most steps is 835. The average number of steps at this interval is 206.2.
 
 ###### 6 Code to describe and show a strategy for imputing missing datas
 
-``` {.r}
+``` r
 #stepSummary <- as.table(summary(activityDataAg$totalSteps))
 #rowsNA <- nrow(activityData[!complete.cases(activityData),])
 ```
 
 There are 2304 days that have NA's
 
-``` {.r}
+``` r
 #  6 Code to describe and show a strategy for imputing missing data
 
 stepSummary <- as.table(summary(activityDataAg$totalSteps))
@@ -109,35 +104,30 @@ activityIntMergeSum$totalSteps <- as.numeric(activityIntMergeSum$totalSteps)
 
 ###### 7) Histogram of the total number of steps taken each day after missing values are imputed
 
-``` {.r}
+``` r
 hist(activityIntMergeSum$totalSteps, main = "Total Steps NA filled with Interval Avg",xlab = "TotalSteps", breaks = 10 )
 ```
 
-![](PA1_githubMarkdown_files/figure-markdown/unnamed-chunk-8-1.png)
+![](PA1_githubMarkdown_files/figure-markdown_github/unnamed-chunk-8-1.png)
 
-``` {.r}
+``` r
 NAFillStepsSummary <- as.table(summary(activityIntMergeSum$totalSteps))
 ```
 
-The strategy to fill na's included calculating the average steps per
-interval. Then NA's were replaced with the average value in respect to
-its interval. The mean after replacing the NA's is 10766 and the median
-is 10766. The total daily steps and the average per inverval had no
-significant changes after filling the NA's, as can be seen on the
-charts.
+The strategy to fill na's included calculating the average steps per interval. Then NA's were replaced with the average value in respect to its interval. The mean after replacing the NA's is 10766 and the median is 10766. The total daily steps and the average per inverval had no significant changes after filling the NA's, as can be seen on the charts.
 
-``` {.r}
+``` r
 activityIntMergeAvg<- aggregate(activityIntMerge$steps,list(activityIntMerge$interval),mean)
 names(activityIntMergeAvg) <- c("interval","avgSteps")
 activityIntMergeAvg$avgSteps <- round(activityIntMergeAvg$avgSteps,1)
 plot(activityIntMergeAvg$interval,activityIntMergeAvg$avgSteps,type = "l", main = "Interval after NA Filled",xlab = "5min interval", ylab = "5min Avg Steps")
 ```
 
-![](PA1_githubMarkdown_files/figure-markdown/unnamed-chunk-9-1.png)
+![](PA1_githubMarkdown_files/figure-markdown_github/unnamed-chunk-9-1.png)
 
 ###### 8) Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends
 
-``` {.r}
+``` r
 ###### 8) Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends
 
 activityData$wkdy <- weekdays(activityData$date)
@@ -161,7 +151,7 @@ plot(activityWkend$interval, activityWkend$avgSteps, type = "l",xlab = "interval
 mtext("Weekend vs. Weekday Avg Steps", side=3, outer=TRUE, line=-1) 
 ```
 
-![](PA1_githubMarkdown_files/figure-markdown/unnamed-chunk-10-1.png)
+![](PA1_githubMarkdown_files/figure-markdown_github/unnamed-chunk-10-1.png)
 
 ### License and Copyright Notice
 

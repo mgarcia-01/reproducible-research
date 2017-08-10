@@ -2,8 +2,12 @@
 title: "PA1_githubMarkdown"
 output:
   md_document:
-    variant: markdown
+    variant: markdown_github
+  html_document: default
 ---
+```{r setup, include=TRUE, echo=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 ## Activity Report PA1 {.tabset .tabset-fade .tabset-pills}
 ### Report
      
