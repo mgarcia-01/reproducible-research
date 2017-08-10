@@ -43,15 +43,26 @@ stepSummary <- as.table(summary(activityDataAg$totalSteps))
 rowsNA <- nrow(activityData[!complete.cases(activityData),])
 
 library(zoo)
-activityMean <- aggregate(activityData$steps,list(activityData$date),mean)
-names(activityMean) <- c("date","avgSteps")
-actDataMean <- activityMean[complete.cases(activityMean),]
-actDataMeanNA <- activityMean[!complete.cases(activityMean),]
+  # use activity 5 min interval variable from number 5
+#actDataMeanNA <- activityData[!complete.cases(activityData),]
+activityIntMerge <- merge(activityData,activity5min, by = "interval", all.x = TRUE)
+activityIntMerge$steps <- ifelse(is.na(activityIntMerge$steps) == TRUE, activityIntMerge$avgsteps, activityIntMerge$steps)
+activityIntMergeSum <- aggregate(activityIntMerge$steps,list(activityIntMerge$date),sum)
+names(activityIntMergeSum) <- c("date","totalSteps")
+activityIntMergeSum$date <-  as.Date(activityIntMergeSum$date,format = "%Y-%m-%d")
+hist(activityIntMergeSum$totalSteps, xlab = "TotalSteps NA FilledAvg", breaks = 20)
 
-activityNAfill <- na.locf(activityMean[order(activityMean$date, decreasing = TRUE),], fromLast = TRUE)
-activityNAfill <- activityNAfill[order(activityNAfill$date,decreasing = FALSE),]
-activityNAfill$avgSteps <- as.numeric(activityNAfill$avgSteps)
-activityNAfill$date <- as.Date(activityNAfill$date,format = "%Y-%m-%d")
+
+
+
+
+activityIntMergeAvg<- aggregate(activityIntMerge$steps,list(activityIntMerge$interval),mean)
+names(activityIntMergeAvg) <- c("interval","avgSteps")
+activityIntMergeAvg$avgSteps <- round(activityIntMergeAvg$avgSteps,1)
+plot(activityIntMergeAvg$interval,activityIntMergeAvg$avgSteps,type = "l", main = "Interval after NA Filled",xlab = "5min interval", ylab = "5min Avg Steps")
+NAFillStepsSummary <- as.table(summary(activityIntMerge$steps))
+
+
 
 hist(activityNAfill$avgSteps, xlab = "MeanSteps", breaks = 10)
 
@@ -59,6 +70,11 @@ hist(activityNAfill$avgSteps, xlab = "MeanSteps", breaks = 10)
 activityDataMean <- aggregate(activityData$steps,list(activityData$date),mean)
 names(activityDataMean) <- c("date","meanSteps")
 hist(activityDataMean$meanSteps, xlab = "Mean Steps with NA", breaks = 10)
+
+
+
+
+
 
 #activityDataAg[which(is.na(activityDataAg$totalSteps) == TRUE),]
 activityDataMerge <- merge(activityDataAg, activityNAfill, by = "date", all.x = TRUE)

@@ -87,11 +87,7 @@ There are `r  nrow(activityData[!complete.cases(activityData),])` days that have
 
 ```
 
-The strategy to fill na's includes carrying forward last periods mean value. The dataset is aggregated to get the mean steps for each day. If a day is NA, then the value from previous day is utilized. The below script aggregates, sorts, the uses previous day mean value. The dataset created is "activityNAfill"
-
-The data set before aggregation contains NA's for an entire day. So it is not possible to estimate at a daily level. So the mean from the previous day using locf function works well for the total average steps.
-
-Comparing the two histrograms, there is no significant change, when the breaks are 10
+The strategy to fill na's included calculating the average steps per interval. Then NA's were replaced with the average value in respect to its interval. The mean after replacing the NA's is `r NAFillStepsSummary[4]` and the median is `r NAFillStepsSummary[3]`. The total daily steps and the average per inverval had no significant changes after filling the NA's, as can be seen on the charts.
 
 ``` {r include = TRUE, echo = TRUE}
 #  6 Code to describe and show a strategy for imputing missing data
@@ -100,20 +96,33 @@ stepSummary <- as.table(summary(activityDataAg$totalSteps))
 
 rowsNA <- nrow(activityData[!complete.cases(activityData),])
 
+NAFillStepsSummary <- as.table(summary(activityIntMerge$steps))
 
-library(zoo)
-activityMean <- aggregate(activityData$steps,list(activityData$date),mean)
-names(activityMean) <- c("date","avgSteps")
-actDataMean <- activityMean[complete.cases(activityMean),]
-actDataMeanNA <- activityMean[!complete.cases(activityMean),]
-
-activityNAfill <- na.locf(activityMean[order(activityMean$date, decreasing = TRUE),], fromLast = TRUE)
-activityNAfill <- activityNAfill[order(activityNAfill$date,decreasing = FALSE),]
-
-activityNAfill$avgSteps <- as.numeric(activityNAfill$avgSteps)
-activityNAfill$date <- as.Date(activityNAfill$date,format = "%Y-%m-%d")
-hist(activityNAfill$avgSteps, xlab = "MeanSteps", breaks = 10)
+#library(zoo)
+activityIntMerge <- merge(activityData,activity5min, by = "interval", all.x = TRUE)
+activityIntMerge$steps <- ifelse(is.na(activityIntMerge$steps) == TRUE, activityIntMerge$avgsteps, activityIntMerge$steps)
+activityIntMergeSum <- aggregate(activityIntMerge$steps,list(activityIntMerge$date),sum)
+names(activityIntMergeSum) <- c("date","totalSteps")
+activityIntMergeSum$date <-  as.Date(activityIntMergeSum$date,format = "%Y-%m-%d")
+hist(activityIntMergeSum$totalSteps, main = "Total Steps NA filled with Interval Avg",xlab = "TotalSteps", breaks = 10, )
 ```
+
+We can also see 
+
+``` {r include = TRUE, echo = TRUE}
+activityIntMergeAvg<- aggregate(activityIntMerge$steps,list(activityIntMerge$interval),mean)
+names(activityIntMergeAvg) <- c("interval","avgSteps")
+activityIntMergeAvg$avgSteps <- round(activityIntMergeAvg$avgSteps,1)
+plot(activityIntMergeAvg$interval,activityIntMergeAvg$avgSteps,type = "l", main = "Interval after NA Filled",xlab = "5min interval", ylab = "5min Avg Steps")
+```
+
+
+
+
+
+
+
+
 
 ``` {r include = TRUE, echo = TRUE}
 activityDataMean <- aggregate(activityData$steps,list(activityData$date),mean)
