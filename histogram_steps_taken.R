@@ -4,7 +4,7 @@
 activityDataAg <- aggregate(activityData$steps,list(activityData$date),sum)
 names(activityDataAg) <- c("date","totalSteps")
 #activityDataAg <- activityDataAg[complete.cases(activityDataAg),]
-hist(activityDataAg$totalSteps, xlab = "TotalSteps", breaks = 20)
+hist(activityDataAg$totalSteps, xlab = "TotalSteps", breaks = 10)
 
 ##3) Mean and median number of steps taken each day
 
@@ -45,14 +45,16 @@ rowsNA <- nrow(activityData[!complete.cases(activityData),])
 library(zoo)
   # use activity 5 min interval variable from number 5
 #actDataMeanNA <- activityData[!complete.cases(activityData),]
+#library(zoo)
 activityIntMerge <- merge(activityData,activity5min, by = "interval", all.x = TRUE)
 activityIntMerge$steps <- ifelse(is.na(activityIntMerge$steps) == TRUE, activityIntMerge$avgsteps, activityIntMerge$steps)
 activityIntMergeSum <- aggregate(activityIntMerge$steps,list(activityIntMerge$date),sum)
 names(activityIntMergeSum) <- c("date","totalSteps")
 activityIntMergeSum$date <-  as.Date(activityIntMergeSum$date,format = "%Y-%m-%d")
-hist(activityIntMergeSum$totalSteps, xlab = "TotalSteps NA FilledAvg", breaks = 20)
+activityIntMergeSum$totalSteps <- as.numeric(activityIntMergeSum$totalSteps)
+hist(activityIntMergeSum$totalSteps, main = "Total Steps NA filled with Interval Avg",xlab = "TotalSteps", breaks = 10 )
 
-
+NAFillStepsSummary <- as.table(summary(activityIntMergeSum$totalSteps))
 
 
 
@@ -60,7 +62,7 @@ activityIntMergeAvg<- aggregate(activityIntMerge$steps,list(activityIntMerge$int
 names(activityIntMergeAvg) <- c("interval","avgSteps")
 activityIntMergeAvg$avgSteps <- round(activityIntMergeAvg$avgSteps,1)
 plot(activityIntMergeAvg$interval,activityIntMergeAvg$avgSteps,type = "l", main = "Interval after NA Filled",xlab = "5min interval", ylab = "5min Avg Steps")
-NAFillStepsSummary <- as.table(summary(activityIntMerge$steps))
+
 
 
 

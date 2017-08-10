@@ -96,7 +96,7 @@ stepSummary <- as.table(summary(activityDataAg$totalSteps))
 
 rowsNA <- nrow(activityData[!complete.cases(activityData),])
 
-NAFillStepsSummary <- as.table(summary(activityIntMerge$steps))
+
 
 #library(zoo)
 activityIntMerge <- merge(activityData,activity5min, by = "interval", all.x = TRUE)
@@ -104,7 +104,10 @@ activityIntMerge$steps <- ifelse(is.na(activityIntMerge$steps) == TRUE, activity
 activityIntMergeSum <- aggregate(activityIntMerge$steps,list(activityIntMerge$date),sum)
 names(activityIntMergeSum) <- c("date","totalSteps")
 activityIntMergeSum$date <-  as.Date(activityIntMergeSum$date,format = "%Y-%m-%d")
-hist(activityIntMergeSum$totalSteps, main = "Total Steps NA filled with Interval Avg",xlab = "TotalSteps", breaks = 10, )
+activityIntMergeSum$totalSteps <- as.numeric(activityIntMergeSum$totalSteps)
+hist(activityIntMergeSum$totalSteps, main = "Total Steps NA filled with Interval Avg",xlab = "TotalSteps", breaks = 10 )
+
+NAFillStepsSummary <- as.table(summary(activityIntMergeSum$totalSteps))
 ```
 
 We can also see 
