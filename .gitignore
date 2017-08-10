@@ -22,5 +22,10 @@ vignettes/*.pdf
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
+<<<<<<< HEAD
 activity.csv
 activity_monitoring_data.zip
+=======
+.Rproj.user
+>>>>>>> c5e4fa463528f3a20ad4f9af6f16eb2943dfe737
+reproducible-research.Rproj
