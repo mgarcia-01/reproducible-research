@@ -2,13 +2,8 @@
 title: "PA1_githubMarkdown"
 output:
   md_document:
-    variant: markdown_github
+    variant: markdown
 ---
-
-```{r setup, include=TRUE, echo=TRUE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 ## Activity Report PA1 {.tabset .tabset-fade .tabset-pills}
 ### Report
      
@@ -159,6 +154,7 @@ plot(activityWkdy$interval, activityWkdy$avgSteps, type = "l", xlab = "", ylab =
 plot(activityWkend$interval, activityWkend$avgSteps, type = "l",xlab = "interval", ylab = "WkEnd Avg Steps")
 mtext("Weekend vs. Weekday Avg Steps", side=3, outer=TRUE, line=-1) 
 ```
+
 ### License and Copyright Notice
      Project: https://github.com/pimikeymike/reproducible-research
      Copyright 2017 Michael Garcia. All Rights Reserved.
