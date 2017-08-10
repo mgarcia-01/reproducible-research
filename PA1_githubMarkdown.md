@@ -5,7 +5,7 @@ knitr::opts_chunk$set(echo = TRUE)
 Activity Report PA1
 -------------------
 
-### Report
+### PA1 Final Report
 
 #### 1) Read and Process Data
 
