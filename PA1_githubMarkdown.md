@@ -2,22 +2,10 @@
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-###### License and Copyright Notice
+Activity Report PA1
+-------------------
 
-     Project: https://github.com/pimikeymike/reproducible-research
-     Copyright 2017 Michael Garcia. All Rights Reserved.
-     Inquiries mgar_datascience at protonmail.com
-     
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-         http://www.apache.org/licenses/LICENSE-2.0
-     
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
+### Report
 
 #### 1) Read and Process Data
 
@@ -163,4 +151,6 @@ plot(activityWkend$interval, activityWkend$avgSteps, type = "l",xlab = "interval
 mtext("Weekend vs. Weekday Avg Steps", side=3, outer=TRUE, line=-1) 
 ```
 
-![](PA1_githubMarkdown_files/figure-markdown_github/unnamed-chunk-10-1.png)
+![](PA1_githubMarkdown_files/figure-markdown_github/unnamed-chunk-10-1.png) \#\#\# License and Copyright Notice Project: <https://github.com/pimikeymike/reproducible-research> Copyright 2017 Michael Garcia. All Rights Reserved. Inquiries mgar\_datascience at protonmail.com Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at <http://www.apache.org/licenses/LICENSE-2.0> Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+     License Management through http://fossa.io/
